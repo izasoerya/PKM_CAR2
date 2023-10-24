@@ -12,7 +12,7 @@ MotorDC Conveyer;
 
 void loraFetchData()
 {
-	String loraData;
+	String loraData = "";
 	bool isReceive = false;
 
 	//* Fetch lora data from the GCS
@@ -96,21 +96,18 @@ const long intervalTransmit = 10000;
 const long intervalMotor = 10;
 
 void loop() {
-	unsigned long currentMillis = millis();
-	
-	if (currentMillis - previousMotor >= intervalMotor) 
+	if (millis() - previousMotor >= intervalMotor) 
 	{
 		controlMotorDC();
-	    previousMotor = currentMillis;
+	    previousMotor = millis();
 	}
 	
-	if (currentMillis - previousTransmit >= intervalReceive) 
+	if (millis() - previousReceive >= intervalReceive) 
 	{
-
 		loraFetchData();
-		previousReceive = currentMillis;
+		previousReceive = millis();
 	}
-	// if (currentMillis - previousReceive >= intervalTransmit) 
+	// if (currentMillis - previousTransmit >= intervalTransmit) 
 	// {
 	// 	loraTransmittData();
 	// 	previousTransmit = currentMillis;

@@ -17,28 +17,28 @@ void MotorDC::controlMotor(bool runConveyor, bool stopConveyor)
     {
         analogWrite(powerWindowA, 2400);
         analogWrite(powerWindowB, 0);
-        Serial.println("Sweep UP");
+        // Serial.println("Sweep UP");
     }
     else if (stopConveyor)
     {
         analogWrite(powerWindowA, 0);
         analogWrite(powerWindowB, 1200);
-        Serial.println("Sweep DOWN");
+        // Serial.println("Sweep DOWN");
     }
     else
     {
         analogWrite(powerWindowA, 0); 
         analogWrite(powerWindowB, 0);
-        Serial.println("Sweep STOP");
+        // Serial.println("Sweep STOP");
     }
 }
 
 
-#define RPWM_LEFT       25
-#define RPWM_RIGHT      21
+#define RPWM_LEFT       21
+#define RPWM_RIGHT      25
 
-#define LPWM_LEFT       26
-#define LPWM_RIGHT      3
+#define LPWM_LEFT       3
+#define LPWM_RIGHT      26
 
 #define REN_LEFT        19       
 #define REN_RIGHT       33       

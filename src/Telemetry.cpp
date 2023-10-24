@@ -34,8 +34,9 @@ void Telemetry::parsingFromGCS(String receiveGCS)
             finalResult[wordCounter] += tempReadGCS[Counter];
             finalResult[wordCounter].trim();
         }
-        else 
+        else {
             wordCounter++;
+        }
     }
     listCommand(finalResult[0], finalResult[1], finalResult[2],                      //* LeftSpeed, RightSpeed, Conveyer1, 
                 finalResult[3], finalResult[4], finalResult[5], finalResult[6]);     //* leftSignal, RightSignal, CameraAngle, Conveyer2
