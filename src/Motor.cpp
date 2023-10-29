@@ -125,12 +125,12 @@ int MotorBLDC::controlMotorTurning(uint16_t input)
         // left is faster
         digitalWrite(RPWM_LEFT, LOW);
         analogWrite (RPWM_LEFT, 0);
-        analogWrite (LPWM_LEFT, 400);   
+        analogWrite (LPWM_LEFT, 2000);   
 
         // right is slower
         digitalWrite(LPWM_RIGHT, LOW);
         analogWrite (LPWM_RIGHT, 0);
-        analogWrite (RPWM_RIGHT, 400);  
+        analogWrite (RPWM_RIGHT, 2000);  
     }
     else if(input < lowerThreshold)       // turn left
     {
@@ -141,12 +141,12 @@ int MotorBLDC::controlMotorTurning(uint16_t input)
         analogLeft += lowerThreshold;
         digitalWrite(RPWM_RIGHT, LOW);
         analogWrite (RPWM_RIGHT, 0);
-        analogWrite (LPWM_RIGHT, 400);  
+        analogWrite (LPWM_RIGHT, 2000);  
 
         // right is faster
         digitalWrite(LPWM_LEFT, LOW);
         analogWrite (LPWM_LEFT, 0);
-        analogWrite (RPWM_LEFT, 400);   
+        analogWrite (RPWM_LEFT, 2000);   
     }
     else        // stop
     {
