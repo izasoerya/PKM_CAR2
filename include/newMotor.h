@@ -22,18 +22,6 @@ public:
     Motor();
 };
 
-class PowerWindow : private Motor 
-{
-private:
-    const int PIN_POWERWINDOW_UP   = 2;     // Assign to pin 2
-    const int PIN_POWERWINDOW_DOWN = 22;    // Assign to pin 22
-
-public:
-    PowerWindow();
-    void begin();
-    void controlMotor(bool LimitSwitchUP, bool LimitSwitchDown);
-};
-
 class MainMotorLeft : private Motor
 {
 private: 
