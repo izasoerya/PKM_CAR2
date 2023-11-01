@@ -15,7 +15,8 @@ protected:
         const int PIN_RPWM;
         const int PIN_LPWM;
 
-        PinMotor(int ren, int len, int rpwm, int lpwm) : PIN_LEN(len), PIN_REN(ren), PIN_LPWM(lpwm), PIN_RPWM(rpwm){};
+        PinMotor(int ren, int len, int rpwm, int lpwm) 
+            : PIN_LEN(len), PIN_REN(ren), PIN_LPWM(lpwm), PIN_RPWM(rpwm){};
     };
 
 public:
@@ -26,22 +27,26 @@ class MainMotorLeft : private Motor
 {
 private: 
     PinMotor left;      // ren, len, rpwm, lpwm
+    const int SEN_LEFT = 5;
+    const int SEN_RIGHT = 18;
 
 public: 
     MainMotorLeft();
     void begin();
-    void controlMotor();
+    void controlMotor(int input);
 };
 
 class MainMotorRight : private Motor
 {
 private: 
     PinMotor right;      // ren, len, rpwm, lpwm
-
+    const int SEN_LEFT = 5;
+    const int SEN_RIGHT = 18;
+    
 public: 
     MainMotorRight();
     void begin();
-    void controlMotor();
+    void controlMotor(int input);
 };
 
 #endif
