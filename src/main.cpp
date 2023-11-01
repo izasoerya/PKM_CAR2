@@ -1,5 +1,9 @@
 #include <Arduino.h>
+#include <WiFi.h>
+#include <BluetoothSerial.h>
 #include "Motor.h"
+#include "MotorController.h"
+#include "PowerWindow.h"
 #include "Telemetry.h"
 #include "Sensor.h"
 #include "Models.h"
@@ -9,6 +13,9 @@ CalculateBattery Batt;
 UltrasonicTrash Trash;
 MotorBLDC Wheel;
 MotorDC Conveyer;
+MotorController Motor;
+PowerWindow PW;
+
 
 void loraFetchData()
 {
@@ -40,16 +47,19 @@ void controlMotorDC()
 
 	if(data.rightMotor < turnLeftThreshold || data.rightMotor > turnRightThreshold)
 	{
-		Wheel.controlMotorTurning(data.rightMotor);
+		// Wheel.controlMotorTurning(data.rightMotor);
+		Motor.moveTurning(data.rightMotor);
 	}
 	else 
 	{
-		motorLeft.speed = Wheel.controlMotorLeft(data.leftMotor);
-		motorRight.speed = Wheel.controlMotorRight(data.leftMotor);
+		// motorLeft.speed = Wheel.controlMotorLeft(data.leftMotor);
+		// motorRight.speed = Wheel.controlMotorRight(data.leftMotor);
+		Motor.moveForward(data.leftMotor);
 	}
 	if(motorLeft.speed == 6969 || motorRight.speed == 6969) 
 	{
-		Wheel.controlSetZero();
+		// Wheel.controlSetZero();
+		Motor.emergencyStop();
 		LORA.println("Burn Condition");
 		while(1);
 	}
@@ -57,7 +67,8 @@ void controlMotorDC()
 	{
 		data.leftMotor = 2048;
 		data.rightMotor = 2048;
-		Wheel.controlSetZero();
+		Motor.emergencyStop();
+		// Wheel.controlSetZero();
 	}
 }
 
@@ -77,10 +88,16 @@ void loraTransmittData()
 }
 
 void setup() {
-	// put your setup code here, to run once:
+	// Communication initialization
   	Serial.begin(57600);
 	LORA.begin(57600);
 
+	// Disable WiFi and Bluetooth
+	BluetoothSerial bt;
+	WiFi.disconnect(true);
+	bt.end();
+
+	// Object initialization
 	Wheel.beginMotorLeft();
 	Wheel.beginMotorRight();
 	Conveyer.begin();

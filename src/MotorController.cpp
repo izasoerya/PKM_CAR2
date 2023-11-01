@@ -14,3 +14,9 @@ void MotorController::moveForward(int input)
     left.controlMotor(input);
     right.controlMotor(input);
 }
+
+void MotorController::moveTurning(int input)
+{
+    left.controlMotor(input);
+    right.controlMotor(stopValue - input);
+}
