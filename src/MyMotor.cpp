@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "newMotor.h"
+#include "MyMotor.h"
 
 Motor::Motor(){}
 

@@ -1,5 +1,5 @@
-#ifndef MOTOR_H
-#define MOTOR_H
+#ifndef Ppp_H
+#define Ppp_H
 
 class Motor 
 {
@@ -23,7 +23,7 @@ public:
     Motor();
 };
 
-class MainMotorLeft : private Motor
+class MainMotorLeft : protected Motor
 {
 private: 
     PinMotor left;      // ren, len, rpwm, lpwm
@@ -36,7 +36,7 @@ public:
     void controlMotor(int input);
 };
 
-class MainMotorRight : private Motor
+class MainMotorRight : protected Motor
 {
 private: 
     PinMotor right;      // ren, len, rpwm, lpwm

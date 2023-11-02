@@ -1,7 +1,5 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include <BluetoothSerial.h>
-#include "Motor.h"
 #include "MotorController.h"
 #include "PowerWindow.h"
 #include "Telemetry.h"
@@ -11,11 +9,8 @@
 Telemetry Tele;
 CalculateBattery Batt;
 UltrasonicTrash Trash;
-MotorBLDC Wheel;
-MotorDC Conveyer;
 MotorController Motor;
 PowerWindow PW;
-
 
 void loraFetchData()
 {
@@ -32,9 +27,7 @@ void loraFetchData()
 		Tele.collectControlData(data.leftMotor, data.rightMotor, data.conveyer,
 								data.leftTurn, data.rightTurn, data.cameraAngle, data.conveyerStop);
 	}
-
-	//* Control the RATS parts here
-	Conveyer.controlMotor(data.conveyer, data.conveyerStop);
+	PW.controlMotor(data.conveyer, data.conveyerStop);
 }
 
 ControlMotor motorLeft;
@@ -44,31 +37,24 @@ void controlMotorDC()
 {	
 	const int turnLeftThreshold = 1900;
 	const int turnRightThreshold = 2200;
+	const int stopValue = 2048;
 
-	if(data.rightMotor < turnLeftThreshold || data.rightMotor > turnRightThreshold)
-	{
-		// Wheel.controlMotorTurning(data.rightMotor);
+	if(data.rightMotor < turnLeftThreshold || data.rightMotor > turnRightThreshold) 
 		Motor.moveTurning(data.rightMotor);
-	}
 	else 
-	{
-		// motorLeft.speed = Wheel.controlMotorLeft(data.leftMotor);
-		// motorRight.speed = Wheel.controlMotorRight(data.leftMotor);
 		Motor.moveForward(data.leftMotor);
-	}
+	
 	if(motorLeft.speed == 6969 || motorRight.speed == 6969) 
 	{
-		// Wheel.controlSetZero();
 		Motor.emergencyStop();
 		LORA.println("Burn Condition");
 		while(1);
 	}
 	if(data.isTimeOut) 
 	{
-		data.leftMotor = 2048;
-		data.rightMotor = 2048;
+		data.leftMotor = stopValue;
+		data.rightMotor = stopValue;
 		Motor.emergencyStop();
-		// Wheel.controlSetZero();
 	}
 }
 
@@ -93,14 +79,10 @@ void setup() {
 	LORA.begin(57600);
 
 	// Disable WiFi and Bluetooth
-	BluetoothSerial bt;
 	WiFi.disconnect(true);
-	bt.end();
 
 	// Object initialization
-	Wheel.beginMotorLeft();
-	Wheel.beginMotorRight();
-	Conveyer.begin();
+	Motor.begin();
 	Trash.begin();
 }
 
@@ -110,7 +92,7 @@ unsigned long previousMotor = 0;
 
 const long intervalReceive = 200;
 const long intervalTransmit = 10000;
-const long intervalMotor = 10;
+const long intervalMotor = 50;
 
 void loop() {
 	if (millis() - previousMotor >= intervalMotor) 
@@ -119,14 +101,11 @@ void loop() {
 	    previousMotor = millis();
 	}
 	
-	if (millis() - previousReceive >= intervalReceive) 
+	loraFetchData();
+
+	if (millis() - previousTransmit >= intervalTransmit) 
 	{
-		loraFetchData();
-		previousReceive = millis();
+		loraTransmittData();
+		previousTransmit = millis();
 	}
-	// if (currentMillis - previousTransmit >= intervalTransmit) 
-	// {
-	// 	loraTransmittData();
-	// 	previousTransmit = currentMillis;
-	// }
 }
