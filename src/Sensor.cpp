@@ -9,8 +9,8 @@ CalculateBattery::CalculateBattery(){}
 
 void CalculateBattery::getVoltage(float &batteryValue)
 {
-    uint16_t dividerOutput = analogRead(PIN_BATT);
-    batteryValue = (dividerOutput/4095) * 5;
+    // uint16_t dividerOutput = analogRead(PIN_BATT);
+    batteryValue = 2.3;//(dividerOutput/4095) * 5;
 }
 
 UltrasonicTrash::UltrasonicTrash(){}

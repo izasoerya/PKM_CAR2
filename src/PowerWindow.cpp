@@ -16,20 +16,20 @@ void PowerWindow::controlMotor(bool LimitSwitchUP, bool LimitSwitchDown)
 
     if(LimitSwitchUP)
     {
-        analogWrite(PIN_POWERWINDOW_UP,     halfSpeedPWM);
-        analogWrite(PIN_POWERWINDOW_DOWN,   zeroSpeedPWM);
+        digitalWrite(PIN_POWERWINDOW_UP,     1);
+        digitalWrite(PIN_POWERWINDOW_DOWN,   0);
         // Serial.println("Sweep UP!");
     }
     else if(LimitSwitchDown)
     {
-        analogWrite(PIN_POWERWINDOW_UP,     zeroSpeedPWM);
-        analogWrite(PIN_POWERWINDOW_DOWN,   halfSpeedPWM);
+        digitalWrite(PIN_POWERWINDOW_UP,     0);
+        digitalWrite(PIN_POWERWINDOW_DOWN,   1);
         // Serial.println("Sweep DOWN!");
     }
     else
     {
-        analogWrite(PIN_POWERWINDOW_UP,     zeroSpeedPWM);
-        analogWrite(PIN_POWERWINDOW_DOWN,   zeroSpeedPWM);
+        digitalWrite(PIN_POWERWINDOW_UP,     0);
+        digitalWrite(PIN_POWERWINDOW_DOWN,   0);
         // Serial.println("Sweep STOP!");
     }
 }

@@ -13,6 +13,9 @@ void MotorController::moveForward(int input)
 {
     leftMotor.controlMotor(input);
     rightMotor.controlMotor(input);
+    if(input < 2048) Serial.println("Mundur");
+    else Serial.println("Maju");
+
 }
 
 void MotorController::moveTurning(int input)

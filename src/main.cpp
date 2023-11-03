@@ -83,6 +83,7 @@ void setup() {
 
 	// Object initialization
 	Motor.begin();
+	PW.begin();
 	Trash.begin();
 }
 
@@ -101,11 +102,10 @@ void loop() {
 	    previousMotor = millis();
 	}
 	
-	loraFetchData();
-
 	if (millis() - previousTransmit >= intervalTransmit) 
 	{
 		loraTransmittData();
 		previousTransmit = millis();
 	}
+	else loraFetchData();
 }
