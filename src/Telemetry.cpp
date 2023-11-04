@@ -48,11 +48,11 @@ void Telemetry::listCommand(String leftSpeed, String rightSpeed, String Conveyer
 {
     GCS.leftAnalog      = leftSpeed.toInt();
     GCS.rightAnalog     = rightSpeed.toInt();
-    GCS.conveyer        = Conveyer == "ON" ? true : false;
-    GCS.signalLeft      = leftTurn == "ON" ? true : false;
-    GCS.signalRight     = rightTurn == "ON" ? true : false;
+    GCS.conveyer        = Conveyer == "N" ? true : false;
+    GCS.signalLeft      = leftTurn == "N" ? true : false;
+    GCS.signalRight     = rightTurn == "N" ? true : false;
     GCS.cameraAngle     = cameraAngle.toInt();
-    GCS.conveyerStop    = conveyerStop == "ON" ? true : false;
+    GCS.conveyerStop    = conveyerStop == "N" ? true : false;
 }
 
 void Telemetry::collectControlData(uint16_t &leftMotor, uint16_t &rightMotor, bool &conveyer,

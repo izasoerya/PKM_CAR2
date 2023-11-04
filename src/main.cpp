@@ -19,7 +19,7 @@ void loraFetchData()
 
 	//* Fetch lora data from the GCS
 	loraData = Tele.fetchLoraData(isReceive, LORA);
-	Serial.println(loraData);
+	if(loraData != "")Serial.println(loraData);
 
 	if(isReceive)
 	{
@@ -91,11 +91,13 @@ unsigned long previousReceive = 0;
 unsigned long previousTransmit = 0;
 unsigned long previousMotor = 0;
 
-const long intervalReceive = 200;
+const long intervalReceive = 20;
 const long intervalTransmit = 10000;
-const long intervalMotor = 50;
+const long intervalMotor = 500;	
+bool isTransmitt = false;
 
 void loop() {
+	isTransmitt = false;
 	if (millis() - previousMotor >= intervalMotor) 
 	{
 		controlMotorDC();
@@ -106,6 +108,12 @@ void loop() {
 	{
 		loraTransmittData();
 		previousTransmit = millis();
+		isTransmitt = true;
 	}
-	else loraFetchData();
+	
+	if ((millis() - previousReceive >= intervalReceive) && !isTransmitt) 
+	{
+		loraFetchData();
+		previousReceive = millis();
+	}
 }
