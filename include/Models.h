@@ -18,18 +18,5 @@ struct ControlData
 	bool isTimeOut = false;
 	bool conveyerStop = false;
 };
-ControlData data;
-
-struct ControlMotor
-{
-	int speed;
-	int prevSpeed;
-	bool forward;
-};
-
-uint32_t randNum[4];
-
-
-
 
 #endif

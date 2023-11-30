@@ -5,16 +5,15 @@ Telemetry::Telemetry(){}
 String Telemetry::fetchLoraData(bool &isReceive, HardwareSerial &Serial)
 {
     String data = "";
-	while (Serial.available() > 0) 
-		data += (char)Serial.read();
-	if (data != "") 
-		isReceive = true;
+	while(Serial.available() > 0) data += (char)Serial.read();
+	if(data != "") isReceive = true;
 	return data;
 }
 
 bool Telemetry::timeOutCounter(bool reset)
 {
     bool isTimeout;
+    byte timeOut = 0;
     timeOut = reset ? 0 : timeOut;
     isTimeout = timeOut > 5 ?  true :  false;
     timeOut++;
@@ -23,8 +22,9 @@ bool Telemetry::timeOutCounter(bool reset)
 
 void Telemetry::parsingFromGCS(String receiveGCS)
 {   
-    String finalResult[receiveGCS.length() + 1]; // Use an array of String objects
+    String finalResult[receiveGCS.length() + 1]; 
     char tempReadGCS  [receiveGCS.length() + 1];
+    byte Counter, wordCounter = 0;
 
     strcpy(tempReadGCS, receiveGCS.c_str());
     for (Counter = 0, wordCounter = 0; Counter < receiveGCS.length(); Counter++)
@@ -34,9 +34,7 @@ void Telemetry::parsingFromGCS(String receiveGCS)
             finalResult[wordCounter] += tempReadGCS[Counter];
             finalResult[wordCounter].trim();
         }
-        else {
-            wordCounter++;
-        }
+        else wordCounter++;
     }
 
     listCommand(finalResult[0], finalResult[1], finalResult[2],                      //* LeftSpeed, RightSpeed, Conveyer1, 
@@ -55,30 +53,29 @@ void Telemetry::listCommand(String leftSpeed, String rightSpeed, String Conveyer
     GCS.conveyerStop    = conveyerStop == "N" ? true : false;
 }
 
-void Telemetry::collectControlData(uint16_t &leftMotor, uint16_t &rightMotor, bool &conveyer,
-                                   bool &leftTurn, bool &rightTurn, int &cameraAngle, bool &conveyerStop)
+void Telemetry::collectControlData(ControlData &data)
 {
-    leftTurn = false, rightTurn = false;
-    leftMotor    = GCS.leftAnalog;
-    rightMotor   = GCS.rightAnalog;
-    conveyer     = GCS.conveyer;
-    leftTurn     = GCS.leftAnalog  > (GCS.rightAnalog + 500) ? true : false;
-    rightTurn    = GCS.rightAnalog > (GCS.leftAnalog + 500)  ? true : false;
-    cameraAngle  = GCS.cameraAngle;
-    conveyerStop = GCS.conveyerStop;
+    data.leftTurn = false;
+    data.rightTurn = false;
+    data.leftJoystick    = GCS.leftAnalog;
+    data.rightJoystick   = GCS.rightAnalog;
+    data.conveyer     = GCS.conveyer;
+    data.leftTurn     = GCS.leftAnalog  > (GCS.rightAnalog + 500) ? true : false;
+    data.rightTurn    = GCS.rightAnalog > (GCS.leftAnalog + 500)  ? true : false;
+    data.cameraAngle  = GCS.cameraAngle;
+    data.conveyerStop = GCS.conveyerStop;
 }
 
 
 String Telemetry::constructMessage(float batteryPercentage, bool conveyer, 
                                    bool leftTurn, bool rightTurn, bool trash)
 {
-    char buffer[256];
-    String iConveyer, iLeft, iRight, iTrash, remoteID = "S";
+    char buffer[64];
+    String iConveyer, iLeft, iRight, iTrash;
     iConveyer = conveyer? "N" : "F";
     iLeft = leftTurn ? "N" : "F";
     iRight = rightTurn ? "N" : "F";
     iTrash = trash ? "N" : "F";
-    String comma = ",";
     snprintf(buffer, sizeof(buffer),
             "%0.1f,"
             "%s,%s,"

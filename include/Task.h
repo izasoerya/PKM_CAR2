@@ -12,6 +12,7 @@ CalculateBattery Batt;
 UltrasonicTrash Trash;
 MotorController Motor;
 PowerWindow PW;
+ControlData data;
 
 void loraFetchData()
 {
@@ -20,13 +21,12 @@ void loraFetchData()
 
 	//* Fetch lora data from the GCS
 	loraData = Tele.fetchLoraData(isReceive, LORA);
-	if(loraData != "")Serial.println(loraData);
+	if(loraData != "") Serial.println(loraData);
 
 	if(isReceive)
 	{
 		Tele.parsingFromGCS(loraData);
-		Tele.collectControlData(data.leftJoystick, data.rightJoystick, data.conveyer,
-								data.leftTurn, data.rightTurn, data.cameraAngle, data.conveyerStop);
+		Tele.collectControlData(data);
 	}
 	PW.controlMotor(data.conveyer, data.conveyerStop);
 }

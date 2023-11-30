@@ -8,7 +8,6 @@ void setup() {
 	// Communication initialization
   	Serial.begin(57600);
 	LORA.begin(57600);
-
 	WiFi.disconnect(true);
 
 	// Object initialization

@@ -2,15 +2,12 @@
 #define TELEMETRY_H
 
 #include <Arduino.h>
+#include "Models.h"
 
 class Telemetry 
 {
 private: 
-    char* tempReadGCS;
-    String* finalResult;
-    byte Counter, wordCounter = 0;
     const String StatusOK = "Success";
-    byte timeOut = 0;
     struct receiveGCSControl 
     {
         uint16_t leftAnalog;
@@ -23,15 +20,16 @@ private:
         bool conveyerStop;
     };
     receiveGCSControl GCS;
+    void listCommand(String leftSpeed, String rightSpeed, String Conveyer,
+                    String leftTurn, String rightTurn, String cameraAngle, String conveyerStop);
+
 public:
     Telemetry();
     String fetchLoraData    (bool &isReceive, HardwareSerial &Serial);
     bool timeOutCounter     (bool reset);
     void parsingFromGCS     (String receiveGCS);
-    void listCommand        (String leftSpeed, String rightSpeed, String Conveyer,
-                            String leftTurn, String rightTurn, String cameraAngle, String conveyerStop);
-    void collectControlData (uint16_t &leftMotor, uint16_t &rightMotor, bool &conveyer,
-                             bool &leftTurn, bool &rightTurn, int &cameraAngle, bool &conveyerStop);
+
+    void collectControlData (ControlData &data);
     String constructMessage (float batteryPercentage, bool conveyer,
                              bool leftTurn, bool rightTurn, bool forward);
 };
