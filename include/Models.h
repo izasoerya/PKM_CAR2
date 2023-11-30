@@ -10,7 +10,7 @@
 
 struct ControlData
 {
-	uint16_t leftMotor = 2048, rightMotor = 2048; 
+	uint16_t leftJoystick = 2048, rightJoystick = 2048; 
 	int cameraAngle = 0;
 	float battery = 0.0f;
 	bool leftTurn = false, rightTurn = false;

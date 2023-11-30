@@ -74,10 +74,10 @@ String Telemetry::constructMessage(float batteryPercentage, bool conveyer,
 {
     char buffer[256];
     String iConveyer, iLeft, iRight, iTrash, remoteID = "S";
-    iConveyer = conveyer? "ON" : "OFF";
-    iLeft = leftTurn ? "YES" : "NO";
-    iRight = rightTurn ? "YES" : "NO";
-    iTrash = trash ? "YES" : "NO";
+    iConveyer = conveyer? "N" : "F";
+    iLeft = leftTurn ? "N" : "F";
+    iRight = rightTurn ? "N" : "F";
+    iTrash = trash ? "N" : "F";
     String comma = ",";
     snprintf(buffer, sizeof(buffer),
             "%0.1f,"
